@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import Ingredient from "./Ingredient";
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import styles from "./BurgerIngredients.module.css";
 
 const BurgerIngredients = (props) => {
@@ -9,10 +11,11 @@ const BurgerIngredients = (props) => {
       ingredients,
       bunBurger,
       selectIngredient,
-      data,
-      handleModalIngredient,
+      selectedIngredient,
+      data
     } = props;
     const [current, setCurrent] = useState("Булки");
+    const [isModalIngredient, setIsModalIngredient] = useState(false);
   
     const handleScroll = (e) => {
       if (e.target.scrollTop < 140) {
@@ -23,8 +26,65 @@ const BurgerIngredients = (props) => {
         setCurrent("Начинки");
       }
     };
+
+    const handleModalIngredient = () =>
+    setIsModalIngredient(!isModalIngredient);
+
+    const buns = data.map((el) => {
+      if (el.type !== "bun") {
+        return null;
+      }
+      return (
+        <Ingredient
+          data={el}
+          key={el._id}
+          onClick={selectIngredient}
+          counter={bunBurger && bunBurger._id === el._id ? 1 : null}
+          handleModalIngredient={handleModalIngredient}
+        />
+      );
+    })
+
+    const sauces = data.map((el) => {
+      if (el.type !== "sauce") {
+        return null;
+      }
+      let counter = ingredients.filter(
+        (element) => el._id === element._id
+      ).length;
+      counter = counter === 0 ? null : counter;
+      return (
+        <Ingredient
+          data={el}
+          onClick={selectIngredient}
+          key={el._id}
+          counter={counter}
+          handleModalIngredient={handleModalIngredient}
+        />
+      );
+    })
+
+    const fillings = data.map((el) => {
+      if (el.type !== "main") {
+        return null;
+      }
+      let counter = ingredients.filter(
+        (element) => el._id === element._id
+      ).length;
+      counter = counter === 0 ? null : counter;
+      return (
+        <Ingredient
+          data={el}
+          onClick={selectIngredient}
+          key={el._id}
+          counter={counter}
+          handleModalIngredient={handleModalIngredient}
+        />
+      );
+    })
   
     return (
+      <>
       <section className={`${styles.burgerIngredients} mr-10`}>
         <h1 className="text text_type_main-large mt-10">Соберите бургер</h1>
         <div style={{ display: "flex" }}>
@@ -55,20 +115,7 @@ const BurgerIngredients = (props) => {
               Булки
             </h2>
             <div className={`mr-4 ml-4 ${styles.burgerIngredientsContainer}`}>
-              {data.map((el) => {
-                if (el.type !== "bun") {
-                  return null;
-                }
-                return (
-                  <Ingredient
-                    data={el}
-                    key={el._id}
-                    onClick={selectIngredient}
-                    counter={bunBurger && bunBurger._id === el._id ? 1 : null}
-                    handleModalIngredient={handleModalIngredient}
-                  />
-                );
-              })}
+              {buns}
             </div>
           </div>
           <div>
@@ -78,24 +125,7 @@ const BurgerIngredients = (props) => {
             <div
               className={`mt-6 mb-10 mr-4 ml-4 ${styles.burgerIngredientsContainer}`}
             >
-              {data.map((el) => {
-                if (el.type !== "sauce") {
-                  return null;
-                }
-                let counter = ingredients.filter(
-                  (element) => el._id === element._id
-                ).length;
-                counter = counter === 0 ? null : counter;
-                return (
-                  <Ingredient
-                    data={el}
-                    onClick={selectIngredient}
-                    key={el._id}
-                    counter={counter}
-                    handleModalIngredient={handleModalIngredient}
-                  />
-                );
-              })}
+              {sauces}
             </div>
           </div>
           <div>
@@ -105,28 +135,18 @@ const BurgerIngredients = (props) => {
             <div
               className={`mt-6 mb-10 mr-4 ml-4 ${styles.burgerIngredientsContainer}`}
             >
-              {data.map((el) => {
-                if (el.type !== "main") {
-                  return null;
-                }
-                let counter = ingredients.filter(
-                  (element) => el._id === element._id
-                ).length;
-                counter = counter === 0 ? null : counter;
-                return (
-                  <Ingredient
-                    data={el}
-                    onClick={selectIngredient}
-                    key={el._id}
-                    counter={counter}
-                    handleModalIngredient={handleModalIngredient}
-                  />
-                );
-              })}
+              {fillings}
             </div>
           </div>
         </div>
       </section>
+
+      {isModalIngredient && (
+        <Modal toggleModal={handleModalIngredient} title="Детали ингредиента">
+          <IngredientDetails selectedIngredient={selectedIngredient} />
+        </Modal>
+      )}
+      </>
     );
   };
   

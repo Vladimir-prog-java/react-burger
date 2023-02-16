@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -6,17 +6,25 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import Modal from "../Modal/Modal";
+import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
 
 const BurgerConstructor = (props) => {
 
-  const { bunBurger, ingredients, handleModalOrder } = props;
+  const { bunBurger, ingredients } = props;
   
+  const [isModalOrder, setIsModalOrder] = useState(false);
+
   const ingredientsTotalPrice = ingredients.reduce((acc, el) => acc += el.price, 0);
   const bunTotalPrice = bunBurger? bunBurger.price * 2 : 0;
   const totalPrice = bunTotalPrice + ingredientsTotalPrice;
 
+  const handleModalOrder = () =>
+  setIsModalOrder(!isModalOrder);
+
   return (
+    <>
     <section className={styles.burgerConstructor}>
       <div className="mt-25 mb-10 ml-4">
         {bunBurger && (
@@ -72,6 +80,12 @@ const BurgerConstructor = (props) => {
         </Button>
       </div>
     </section>
+     {isModalOrder && (
+      <Modal toggleModal={handleModalOrder} title="">
+        <OrderDetails />
+      </Modal>
+    )}
+    </>
   );
 };
 
