@@ -74,6 +74,7 @@ const BurgerConstructor = (props) => {
         <Button
           type="primary"
           size="large"
+          htmlType="button"
           onClick={handleModalOrder}
         >
           Оформить заказ
@@ -105,7 +106,7 @@ BurgerConstructor.propTypes = {
       image: PropTypes.string.isRequired,
     })
   ).isRequired,
-  handleModalOrder: PropTypes.func.isRequired,
+  // handleModalOrder: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

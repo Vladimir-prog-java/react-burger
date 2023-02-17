@@ -162,7 +162,7 @@ const BurgerIngredients = (props) => {
         _id: PropTypes.string.isRequired,
       })
     ).isRequired,
-    handleModalIngredient: PropTypes.func.isRequired,
+    // handleModalIngredient: PropTypes.func.isRequired,
     selectIngredient: PropTypes.func.isRequired,
     data: PropTypes.oneOfType([
       PropTypes.oneOf([null]).isRequired,
