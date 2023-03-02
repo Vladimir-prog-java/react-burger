@@ -1,109 +1,136 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import Ingredient from "./Ingredient";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import styles from "./BurgerIngredients.module.css";
+import { CLOSE_MODAL_INGREDIENT_DETAILS, SET_CURRENT_BURGER_INGREDIENTS_NAME } from "../../services/actions/interface-actions";
 
-const BurgerIngredients = (props) => {
-    const {
-      ingredients,
-      bunBurger,
-      selectIngredient,
-      selectedIngredient,
-      data
-    } = props;
-    const [current, setCurrent] = useState("Булки");
-    const [isModalIngredient, setIsModalIngredient] = useState(false);
-  
-    const handleScroll = (e) => {
-      if (e.target.scrollTop < 140) {
-        setCurrent("Булки");
-      } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
-        setCurrent("Соусы");
-      } else {
-        setCurrent("Начинки");
-      }
-    };
+const BurgerIngredients = () => {
+  const { ingredients, bunBurger, data } = useSelector(
+    (store) => store.appReducer
+  );
+  const currentIngredientsName = useSelector(
+    (store) => store.interfaceReducer.currentIngredientsName
+  );
 
-    const handleModalIngredient = () =>
-    setIsModalIngredient(!isModalIngredient);
+  const { isModalIngredientDetailsOpen } = useSelector(
+    (store) => store.interfaceReducer
+  );
+  const dispatch = useDispatch();
 
-    const buns = data.map((el) => {
-      if (el.type !== "bun") {
-        return null;
-      }
-      return (
-        <Ingredient
-          data={el}
-          key={el._id}
-          onClick={selectIngredient}
-          counter={bunBurger && bunBurger._id === el._id ? 1 : null}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
+  const handleModalClose = useCallback(() => {
+    dispatch({ type: CLOSE_MODAL_INGREDIENT_DETAILS });
+  }, [dispatch]);
 
-    const sauces = data.map((el) => {
-      if (el.type !== "sauce") {
-        return null;
-      }
-      let counter = ingredients.filter(
-        (element) => el._id === element._id
-      ).length;
-      counter = counter === 0 ? null : counter;
-      return (
-        <Ingredient
-          data={el}
-          onClick={selectIngredient}
-          key={el._id}
-          counter={counter}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
+  const handleScroll = (e) => {
+    if (e.target.scrollTop < 140) {
+      dispatch({
+        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+        ingredientsName: "Булки",
+      });
+    } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
+      dispatch({
+        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+        ingredientsName: "Соусы",
+      });
+    } else {
+      dispatch({
+        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+        ingredientsName: "Начинки",
+      });
+    }
+  };
 
-    const fillings = data.map((el) => {
-      if (el.type !== "main") {
-        return null;
-      }
-      let counter = ingredients.filter(
-        (element) => el._id === element._id
-      ).length;
-      counter = counter === 0 ? null : counter;
-      return (
-        <Ingredient
-          data={el}
-          onClick={selectIngredient}
-          key={el._id}
-          counter={counter}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
-  
+  const buns = data.map((el) => {
+    if (el.type !== "bun") {
+      return null;
+    }
     return (
-      <>
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={bunBurger && bunBurger._id === el._id ? 1 : null}
+      />
+    );
+  });
+
+  const sauces = data.map((el) => {
+    if (el.type !== "sauce") {
+      return null;
+    }
+    let counter = ingredients.filter(
+      (element) => el._id === element._id
+    ).length;
+    counter = counter === 0 ? null : counter;
+    return (
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={counter}
+      />
+    );
+  });
+
+  const fillings = data.map((el) => {
+    if (el.type !== "main") {
+      return null;
+    }
+    let counter = ingredients.filter(
+      (element) => el._id === element._id
+    ).length;
+    counter = counter === 0 ? null : counter;
+    return (
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={counter}
+      />
+    );
+  });
+
+  return (
+    <>
       <section className={`${styles.burgerIngredients} mr-10`}>
         <h1 className="text text_type_main-large mt-10">Соберите бургер</h1>
         <div style={{ display: "flex" }}>
           <a href="#bun">
-            <Tab value="Булки" active={current === "Булки"} onClick={setCurrent}>
-              {" "}
+            <Tab
+              value="Булки"
+              active={currentIngredientsName === "Булки"}
+              onClick={() =>
+                dispatch({
+                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+                  ingredientsName: "Булки",
+                })
+              }
+            >
               Булки
             </Tab>
           </a>
           <a href="#sauce">
-            <Tab value="Соусы" active={current === "Соусы"} onClick={setCurrent}>
+            <Tab
+              value="Соусы"
+              active={currentIngredientsName === "Соусы"}
+              onClick={() =>
+                dispatch({
+                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+                  ingredientsName: "Соусы",
+                })}
+            >
               Соусы
             </Tab>
           </a>
           <a href="#main">
             <Tab
               value="Начинки"
-              active={current === "Начинки"}
-              onClick={setCurrent}
+              active={currentIngredientsName === "Начинки"}
+              onClick={() =>
+                dispatch({
+                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
+                  ingredientsName: "Начинки",
+                })}
             >
               Начинки
             </Tab>
@@ -141,38 +168,13 @@ const BurgerIngredients = (props) => {
         </div>
       </section>
 
-      {isModalIngredient && (
-        <Modal toggleModal={handleModalIngredient} title="Детали ингредиента">
-          <IngredientDetails selectedIngredient={selectedIngredient} />
+      {isModalIngredientDetailsOpen && (
+        <Modal toggleModal={handleModalClose} title="Детали ингредиента">
+          <IngredientDetails />
         </Modal>
       )}
-      </>
-    );
-  };
-  
-  BurgerIngredients.propTypes = {
-    bunBurger: PropTypes.oneOfType([
-      PropTypes.oneOf([null]).isRequired,
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      }).isRequired,
-    ]),
-    ingredients: PropTypes.arrayOf(
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    // handleModalIngredient: PropTypes.func.isRequired,
-    selectIngredient: PropTypes.func.isRequired,
-    data: PropTypes.oneOfType([
-      PropTypes.oneOf([null]).isRequired,
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          _id: PropTypes.string.isRequired,
-          type: PropTypes.string.isRequired,
-        }).isRequired
-      ),
-    ]),
-  };
-  
-  export default BurgerIngredients;
+    </>
+  );
+};
+
+export default BurgerIngredients;

@@ -1,9 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import doneImg from "../../images/done.svg";
 
-const OrderDetails = () => (
+const OrderDetails = () => {
+  const { orderNumber } = useSelector((store) => store.appReducer);
+
+  return (
     <>
-      <h2 className="text text_type_digits-large mb-8">034536</h2>
+      <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>
       <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
       <img src={doneImg} alt="doneLogo" className="mb-15" />
       <p className="text text_type_main-default mb-2">
@@ -14,5 +18,6 @@ const OrderDetails = () => (
       </p>
     </>
   );
-  
-  export default OrderDetails;
+};
+
+export default OrderDetails;

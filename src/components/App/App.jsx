@@ -1,36 +1,23 @@
-import React, { useState, useEffect } from "react";
-import * as _ from "lodash";
+import React, { useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+// import * as _ from "lodash";
 import AppHeader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import styles from "./App.module.css";
-
-import {getIngredients} from "../../utils/burger-api"
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../services/actions/app-actions";
 
 function App() {
 
-  const [data, setData] = useState(null);
-  const [bunBurger, setBunBurger] = useState(null);
-  const [ingredients, setIngredients] = useState([]);
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const [error, setError] = useState(null);
-  
-  const selectIngredient = (ingredient) => (e) => {
-    e.preventDefault();
-    if (ingredient.type === "bun") {
-      setBunBurger(ingredient);
-    } else {
-      setIngredients([
-        ...ingredients,
-        { ...ingredient, key: _.uniqueId(ingredient._id) },
-      ]);
-    }
-    setSelectedIngredient(ingredient);
-  };
+  const { data, error } = useSelector((store) => store.appReducer);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getIngredients(setData, setError)
-  }, []);
+    dispatch(getData());
+  }, [dispatch]);
 
   return (
     <>
@@ -43,17 +30,10 @@ function App() {
       <main className={styles.main}>
         {data && (
           <div className={styles.container}>
-            <BurgerIngredients
-              ingredients={ingredients}
-              bunBurger={bunBurger}
-              selectIngredient={selectIngredient}
-              selectedIngredient={selectedIngredient}
-              data={data}
-            />
-            <BurgerConstructor
-              ingredients={ingredients}
-              bunBurger={bunBurger}
-            />
+            <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+            </DndProvider>
           </div>
         )}
       </main>
