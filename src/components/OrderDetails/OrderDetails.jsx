@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import doneImg from "../../images/done.svg";
 
 const OrderDetails = () => {
-  const { orderNumber } = useSelector((store) => store.appReducer);
+  const { orderNumber } = useSelector((store) => store.orderReducer);
 
   return (
     <>

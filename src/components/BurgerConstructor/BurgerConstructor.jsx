@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import {
@@ -16,7 +16,7 @@ import BurgerConstructorInnerIngredients from "./BurgerConstructorIngredients";
 
 const BurgerConstructor = () => {
 
-  const { bunBurger, ingredients } = useSelector((store) => store.appReducer);
+  const { bunBurger, ingredients } = useSelector((store) => store.ingredientsReducer);
   // console.log('ingredients', ingredients)
   
   const { isModalOrderDetailsOpen } = useSelector(
@@ -25,12 +25,12 @@ const BurgerConstructor = () => {
 
   const dispatch = useDispatch();
 
-  const handleModalClose = useCallback(() => {
+  const handleModalClose = () => {
     dispatch({type: CLOSE_MODAL_ORDER_DETAILS});
-  }, [dispatch]);
+  };
 
-  const ingredientsTotalPrice = ingredients.reduce((acc, el) => acc += el.price, 0);
-  const bunTotalPrice = bunBurger? bunBurger.price * 2 : 0;
+  const ingredientsTotalPrice = useMemo(() => ingredients.reduce((acc, el) => acc += el.price, 0), [ingredients]) ;
+  const bunTotalPrice = useMemo(() => (bunBurger? bunBurger.price * 2 : 0), [bunBurger]);
   const totalPrice = bunTotalPrice + ingredientsTotalPrice;
 
   const [{ isDragContainer }, dropTarget] = useDrop({

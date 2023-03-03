@@ -1,36 +1,36 @@
 import * as _ from "lodash";
 import {
-  SET_DATA,
-  SET_ERROR,
-  // SET_ORDER_NUMBER,
-  // SET_SELECT_INGREDIENT,
-  // DELETE_INGREDIENT_FROM_INGREDIENTS,
-  // REPLACE_INNER_DRAG_INGREDIENT
+//   SET_DATA,
+//   SET_ERROR,
+  SET_ORDER_NUMBER,
+//   SET_SELECT_INGREDIENT,
+//   DELETE_INGREDIENT_FROM_INGREDIENTS,
+//   REPLACE_INNER_DRAG_INGREDIENT
 } from "../../services/actions/app-actions";
 
 const initialState = {
-  data: null,
-  error: null,
-  // bunBurger: null,
-  // ingredients: [],
-  // selectedIngredient: null,
-  // orderNumber: null,
+//   data: null,
+//   error: null,
+//   bunBurger: null,
+//   ingredients: [],
+//   selectedIngredient: null,
+  orderNumber: null,
 };
 
-export const appReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_DATA: {
-      return {
-        ...state,
-        data: action.data,
-      };
-    }
-    case SET_ERROR: {
-      return {
-        ...state,
-        error: action.error,
-      };
-    }
+    // case SET_DATA: {
+    //   return {
+    //     ...state,
+    //     data: action.data,
+    //   };
+    // }
+    // case SET_ERROR: {
+    //   return {
+    //     ...state,
+    //     error: action.error,
+    //   };
+    // }
     // case SET_SELECT_INGREDIENT: {
     //   const newState =
     //     action.ingredient.type === "bun"
@@ -47,14 +47,14 @@ export const appReducer = (state = initialState, action) => {
     //       };
     //   return { ...newState, selectedIngredient: action.ingredient };
     // }
-    // case SET_ORDER_NUMBER: {
-    //   return {
-    //     ...state,
-    //     orderNumber: action.orderNumber,
-    //     bunBurger: null,
-    //     ingredients: [],
-    //   };
-    // }
+    case SET_ORDER_NUMBER: {
+      return {
+        ...state,
+        orderNumber: action.orderNumber,
+        bunBurger: null,
+        ingredients: [],
+      };
+    }
     // case DELETE_INGREDIENT_FROM_INGREDIENTS: {
     //   return {
     //     ...state,

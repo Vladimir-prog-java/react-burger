@@ -3,13 +3,11 @@ import {
   CLOSE_MODAL_INGREDIENT_DETAILS,
   OPEN_MODAL_ORDER_DETAILS,
   CLOSE_MODAL_ORDER_DETAILS,
-  SET_CURRENT_BURGER_INGREDIENTS_NAME
 } from "../actions/interface-actions";
 
 const initialState = {
   isModalIngredientDetailsOpen: false,
   isModalOrderDetailsOpen: false,
-  currentIngredientsName: "Булки",
 };
 
 export const interfaceReducer = (state = initialState, action) => {
@@ -36,12 +34,6 @@ export const interfaceReducer = (state = initialState, action) => {
       return {
         ...state,
         isModalOrderDetailsOpen: false,
-      }
-    }
-    case SET_CURRENT_BURGER_INGREDIENTS_NAME: {
-      return {
-        ...state,
-        currentIngredientsName: action.ingredientsName
       }
     }
     default: {

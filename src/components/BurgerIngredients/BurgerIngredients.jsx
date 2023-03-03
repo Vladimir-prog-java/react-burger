@@ -1,16 +1,21 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "./Ingredient";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import styles from "./BurgerIngredients.module.css";
-import { CLOSE_MODAL_INGREDIENT_DETAILS, SET_CURRENT_BURGER_INGREDIENTS_NAME } from "../../services/actions/interface-actions";
+import { CLOSE_MODAL_INGREDIENT_DETAILS } from "../../services/actions/interface-actions";
 
 const BurgerIngredients = () => {
-  const { ingredients, bunBurger, data } = useSelector(
+  const { data } = useSelector(
     (store) => store.appReducer
   );
+
+  const { ingredients, bunBurger } = useSelector(
+    (store) => store.ingredientsReducer
+  );
+
   const currentIngredientsName = useSelector(
     (store) => store.interfaceReducer.currentIngredientsName
   );
@@ -24,24 +29,18 @@ const BurgerIngredients = () => {
     dispatch({ type: CLOSE_MODAL_INGREDIENT_DETAILS });
   }, [dispatch]);
 
+  const [current, setCurrent] = useState("Булки");
+
   const handleScroll = (e) => {
     if (e.target.scrollTop < 140) {
-      dispatch({
-        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-        ingredientsName: "Булки",
-      });
+      setCurrent("Булки");
     } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
-      dispatch({
-        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-        ingredientsName: "Соусы",
-      });
+      setCurrent("Соусы");
     } else {
-      dispatch({
-        type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-        ingredientsName: "Начинки",
-      });
+      setCurrent("Начинки");
     }
   };
+
 
   const buns = data.map((el) => {
     if (el.type !== "bun") {
@@ -96,41 +95,20 @@ const BurgerIngredients = () => {
         <h1 className="text text_type_main-large mt-10">Соберите бургер</h1>
         <div style={{ display: "flex" }}>
           <a href="#bun">
-            <Tab
-              value="Булки"
-              active={currentIngredientsName === "Булки"}
-              onClick={() =>
-                dispatch({
-                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-                  ingredientsName: "Булки",
-                })
-              }
-            >
+            <Tab value="Булки" active={current === "Булки"} onClick={setCurrent}>
               Булки
             </Tab>
           </a>
           <a href="#sauce">
-            <Tab
-              value="Соусы"
-              active={currentIngredientsName === "Соусы"}
-              onClick={() =>
-                dispatch({
-                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-                  ingredientsName: "Соусы",
-                })}
-            >
+            <Tab value="Соусы" active={current === "Соусы"} onClick={setCurrent}>
               Соусы
             </Tab>
           </a>
           <a href="#main">
-            <Tab
+             <Tab
               value="Начинки"
-              active={currentIngredientsName === "Начинки"}
-              onClick={() =>
-                dispatch({
-                  type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
-                  ingredientsName: "Начинки",
-                })}
+              active={current === "Начинки"}
+              onClick={setCurrent}
             >
               Начинки
             </Tab>

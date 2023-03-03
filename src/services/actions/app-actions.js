@@ -11,6 +11,10 @@ export const SET_SELECT_INGREDIENT = 'SET_SELECT_INGREDIENT';
 export const DELETE_INGREDIENT_FROM_INGREDIENTS = 'DELETE_INGREDIENT_FROM_INGREDIENTS';
 export const REPLACE_INNER_DRAG_INGREDIENT = 'REPLACE_INNER_DRAG_INGREDIENT';
 
+export const BUN = 'bun';
+
+
+
 export function getData() {
   return function(dispatch) {
     axios.get(getDataUrl)
