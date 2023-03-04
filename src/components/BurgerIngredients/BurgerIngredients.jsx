@@ -1,96 +1,101 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import Ingredient from "./Ingredient";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import styles from "./BurgerIngredients.module.css";
+import { CLOSE_MODAL_INGREDIENT_DETAILS } from "../../services/actions/interface-actions";
 
-const BurgerIngredients = (props) => {
-    const {
-      ingredients,
-      bunBurger,
-      selectIngredient,
-      selectedIngredient,
-      data
-    } = props;
-    const [current, setCurrent] = useState("Булки");
-    const [isModalIngredient, setIsModalIngredient] = useState(false);
-  
-    const handleScroll = (e) => {
-      if (e.target.scrollTop < 140) {
-        setCurrent("Булки");
-      } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
-        setCurrent("Соусы");
-      } else {
-        setCurrent("Начинки");
-      }
-    };
+const BurgerIngredients = () => {
+  const { data } = useSelector(
+    (store) => store.appReducer
+  );
 
-    const handleModalIngredient = () =>
-    setIsModalIngredient(!isModalIngredient);
+  const { ingredients, bunBurger } = useSelector(
+    (store) => store.ingredientsReducer
+  );
 
-    const buns = data.map((el) => {
-      if (el.type !== "bun") {
-        return null;
-      }
-      return (
-        <Ingredient
-          data={el}
-          key={el._id}
-          onClick={selectIngredient}
-          counter={bunBurger && bunBurger._id === el._id ? 1 : null}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
+  const currentIngredientsName = useSelector(
+    (store) => store.interfaceReducer.currentIngredientsName
+  );
 
-    const sauces = data.map((el) => {
-      if (el.type !== "sauce") {
-        return null;
-      }
-      let counter = ingredients.filter(
-        (element) => el._id === element._id
-      ).length;
-      counter = counter === 0 ? null : counter;
-      return (
-        <Ingredient
-          data={el}
-          onClick={selectIngredient}
-          key={el._id}
-          counter={counter}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
+  const { isModalIngredientDetailsOpen } = useSelector(
+    (store) => store.interfaceReducer
+  );
+  const dispatch = useDispatch();
 
-    const fillings = data.map((el) => {
-      if (el.type !== "main") {
-        return null;
-      }
-      let counter = ingredients.filter(
-        (element) => el._id === element._id
-      ).length;
-      counter = counter === 0 ? null : counter;
-      return (
-        <Ingredient
-          data={el}
-          onClick={selectIngredient}
-          key={el._id}
-          counter={counter}
-          handleModalIngredient={handleModalIngredient}
-        />
-      );
-    })
-  
+  const handleModalClose = useCallback(() => {
+    dispatch({ type: CLOSE_MODAL_INGREDIENT_DETAILS });
+  }, [dispatch]);
+
+  const [current, setCurrent] = useState("Булки");
+
+  const handleScroll = (e) => {
+    if (e.target.scrollTop < 140) {
+      setCurrent("Булки");
+    } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
+      setCurrent("Соусы");
+    } else {
+      setCurrent("Начинки");
+    }
+  };
+
+
+  const buns = data.map((el) => {
+    if (el.type !== "bun") {
+      return null;
+    }
     return (
-      <>
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={bunBurger && bunBurger._id === el._id ? 1 : null}
+      />
+    );
+  });
+
+  const sauces = data.map((el) => {
+    if (el.type !== "sauce") {
+      return null;
+    }
+    let counter = ingredients.filter(
+      (element) => el._id === element._id
+    ).length;
+    counter = counter === 0 ? null : counter;
+    return (
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={counter}
+      />
+    );
+  });
+
+  const fillings = data.map((el) => {
+    if (el.type !== "main") {
+      return null;
+    }
+    let counter = ingredients.filter(
+      (element) => el._id === element._id
+    ).length;
+    counter = counter === 0 ? null : counter;
+    return (
+      <Ingredient
+        data={el}
+        key={el._id}
+        counter={counter}
+      />
+    );
+  });
+
+  return (
+    <>
       <section className={`${styles.burgerIngredients} mr-10`}>
         <h1 className="text text_type_main-large mt-10">Соберите бургер</h1>
         <div style={{ display: "flex" }}>
           <a href="#bun">
             <Tab value="Булки" active={current === "Булки"} onClick={setCurrent}>
-              {" "}
               Булки
             </Tab>
           </a>
@@ -100,7 +105,7 @@ const BurgerIngredients = (props) => {
             </Tab>
           </a>
           <a href="#main">
-            <Tab
+             <Tab
               value="Начинки"
               active={current === "Начинки"}
               onClick={setCurrent}
@@ -141,38 +146,13 @@ const BurgerIngredients = (props) => {
         </div>
       </section>
 
-      {isModalIngredient && (
-        <Modal toggleModal={handleModalIngredient} title="Детали ингредиента">
-          <IngredientDetails selectedIngredient={selectedIngredient} />
+      {isModalIngredientDetailsOpen && (
+        <Modal toggleModal={handleModalClose} title="Детали ингредиента">
+          <IngredientDetails />
         </Modal>
       )}
-      </>
-    );
-  };
-  
-  BurgerIngredients.propTypes = {
-    bunBurger: PropTypes.oneOfType([
-      PropTypes.oneOf([null]).isRequired,
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      }).isRequired,
-    ]),
-    ingredients: PropTypes.arrayOf(
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    // handleModalIngredient: PropTypes.func.isRequired,
-    selectIngredient: PropTypes.func.isRequired,
-    data: PropTypes.oneOfType([
-      PropTypes.oneOf([null]).isRequired,
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          _id: PropTypes.string.isRequired,
-          type: PropTypes.string.isRequired,
-        }).isRequired
-      ),
-    ]),
-  };
-  
-  export default BurgerIngredients;
+    </>
+  );
+};
+
+export default BurgerIngredients;

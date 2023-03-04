@@ -1,32 +1,60 @@
-import React, {useState} from "react";
+import React, { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
 import {
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
+import { getOrder } from "../../services/actions/app-actions";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
+import { SET_SELECT_INGREDIENT } from "../../services/actions/app-actions";
+import { CLOSE_MODAL_ORDER_DETAILS} from "../../services/actions/interface-actions"
+import BurgerConstructorInnerIngredients from "./BurgerConstructorIngredients";
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = () => {
 
-  const { bunBurger, ingredients } = props;
+  const { bunBurger, ingredients } = useSelector((store) => store.ingredientsReducer);
+  // console.log('ingredients', ingredients)
   
-  const [isModalOrder, setIsModalOrder] = useState(false);
+  const { isModalOrderDetailsOpen } = useSelector(
+    (store) => store.interfaceReducer
+  );
 
-  const ingredientsTotalPrice = ingredients.reduce((acc, el) => acc += el.price, 0);
-  const bunTotalPrice = bunBurger? bunBurger.price * 2 : 0;
+  const dispatch = useDispatch();
+
+  const handleModalClose = () => {
+    dispatch({type: CLOSE_MODAL_ORDER_DETAILS});
+  };
+
+  const ingredientsTotalPrice = useMemo(() => ingredients.reduce((acc, el) => acc += el.price, 0), [ingredients]) ;
+  const bunTotalPrice = useMemo(() => (bunBurger? bunBurger.price * 2 : 0), [bunBurger]);
   const totalPrice = bunTotalPrice + ingredientsTotalPrice;
 
-  const handleModalOrder = () =>
-  setIsModalOrder(!isModalOrder);
+  const [{ isDragContainer }, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(element) {
+      dispatch({ type: SET_SELECT_INGREDIENT, ingredient: element });
+    },
+    collect: (monitor) => ({
+      isDragContainer: monitor.canDrop(),
+    }),
+  });
+
+  const burgerConstructorIngredientPlaceStyle = isDragContainer
+    ? { border: "1px solid lightgreen" }
+    : null;
 
   return (
     <>
     <section className={styles.burgerConstructor}>
-      <div className="mt-25 mb-10 ml-4">
+    <div
+        className={`mt-25 mb-10 ml-4 ${styles.burgerConstructorIngredientPlace}`}
+        ref={dropTarget}
+        style={burgerConstructorIngredientPlaceStyle}
+      >
         {bunBurger && (
           <div className="ml-8 mb-4">
             <ConstructorElement
@@ -38,19 +66,10 @@ const BurgerConstructor = (props) => {
             />
           </div>
         )}
-        {
+       {
           <div className={`pr-2 ${styles.scrollbar}`}>
-            {ingredients.map((el) => (
-              <div key={el.key} className={`mb-4 ${styles.mainIngredients}`}>
-                <div className="mr-2">
-                  <DragIcon type="primary" />
-                </div>
-                <ConstructorElement
-                  text={el.name}
-                  price={el.price}
-                  thumbnail={el.image}
-                />
-              </div>
+            {ingredients.map((el, index) => (
+              <BurgerConstructorInnerIngredients el={el} index={index} key={el.key}/>
             ))}
           </div>
         }
@@ -75,38 +94,20 @@ const BurgerConstructor = (props) => {
           type="primary"
           size="large"
           htmlType="button"
-          onClick={handleModalOrder}
+          onClick={() =>
+            bunBurger && ingredients && dispatch(getOrder(ingredients, bunBurger))}
         >
           Оформить заказ
         </Button>
       </div>
     </section>
-     {isModalOrder && (
-      <Modal toggleModal={handleModalOrder} title="">
+     {isModalOrderDetailsOpen && (
+      <Modal toggleModal={handleModalClose} title="">
         <OrderDetails />
       </Modal>
     )}
     </>
   );
-};
-
-BurgerConstructor.propTypes = {
-  bunBurger: PropTypes.oneOfType([
-    PropTypes.oneOf([null]).isRequired,
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    }).isRequired,
-  ]),
-  ingredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  // handleModalOrder: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;
