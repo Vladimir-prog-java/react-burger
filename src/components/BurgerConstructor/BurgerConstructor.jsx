@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect, useLocation } from "react-router-dom";
 import { useDrop } from "react-dnd";
 import {
   ConstructorElement,
@@ -10,7 +11,7 @@ import { getOrder } from "../../services/actions/app-actions";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
-import { SET_SELECT_INGREDIENT } from "../../services/actions/app-actions";
+import { SET_ADDED_INGREDIENT } from "../../services/actions/app-actions";
 import { CLOSE_MODAL_ORDER_DETAILS} from "../../services/actions/interface-actions"
 import BurgerConstructorInnerIngredients from "./BurgerConstructorIngredients";
 
@@ -18,12 +19,17 @@ const BurgerConstructor = () => {
 
   const { bunBurger, ingredients } = useSelector((store) => store.ingredientsReducer);
   // console.log('ingredients', ingredients)
-  
+  const { redirectToLoginForOrder, redirectToOrderDetails } = useSelector(
+    (store) => store.authorizationReducer
+  );
+
   const { isModalOrderDetailsOpen } = useSelector(
     (store) => store.interfaceReducer
   );
 
   const dispatch = useDispatch();
+
+  let location = useLocation();
 
   const handleModalClose = () => {
     dispatch({type: CLOSE_MODAL_ORDER_DETAILS});
@@ -36,7 +42,7 @@ const BurgerConstructor = () => {
   const [{ isDragContainer }, dropTarget] = useDrop({
     accept: "ingredient",
     drop(element) {
-      dispatch({ type: SET_SELECT_INGREDIENT, ingredient: element });
+      dispatch({ type: SET_ADDED_INGREDIENT, ingredient: element });
     },
     collect: (monitor) => ({
       isDragContainer: monitor.canDrop(),
@@ -94,12 +100,21 @@ const BurgerConstructor = () => {
           type="primary"
           size="large"
           htmlType="button"
-          onClick={() =>
-            bunBurger && ingredients && dispatch(getOrder(ingredients, bunBurger))}
+          onClick={async () => {
+            bunBurger && ingredients && dispatch(getOrder(ingredients, bunBurger))}}
         >
           Оформить заказ
         </Button>
       </div>
+      {redirectToLoginForOrder && <Redirect to="/login" />}
+      {redirectToOrderDetails && (
+        <Redirect
+          to={{
+            pathname: "/order-details",
+            state: { background: location },
+          }}
+        />
+      )}
     </section>
      {isModalOrderDetailsOpen && (
       <Modal toggleModal={handleModalClose} title="">

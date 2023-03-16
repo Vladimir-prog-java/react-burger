@@ -4,6 +4,7 @@ import {
 //   SET_ERROR,
 //   SET_ORDER_NUMBER,
   SET_SELECT_INGREDIENT,
+  SET_ADDED_INGREDIENT,
   DELETE_INGREDIENT_FROM_INGREDIENTS,
   REPLACE_INNER_DRAG_INGREDIENT,
   BUN
@@ -32,7 +33,7 @@ export const ingredientsReducer = (state = initialState, action) => {
     //     error: action.error,
     //   };
     // }
-    case SET_SELECT_INGREDIENT: {
+    case SET_ADDED_INGREDIENT: {
       const newState =
         action.ingredient.type === BUN
           ? { ...state, bunBurger: action.ingredient }
@@ -46,7 +47,7 @@ export const ingredientsReducer = (state = initialState, action) => {
               },
             ],
           };
-      return { ...newState, selectedIngredient: action.ingredient };
+      return { ...newState };
     }
     // case SET_ORDER_NUMBER: {
     //   return {

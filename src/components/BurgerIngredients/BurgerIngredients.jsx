@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "./Ingredient";
 import Modal from "../Modal/Modal";
@@ -25,6 +26,8 @@ const BurgerIngredients = () => {
   );
   const dispatch = useDispatch();
 
+  let location = useLocation();
+
   const handleModalClose = useCallback(() => {
     dispatch({ type: CLOSE_MODAL_INGREDIENT_DETAILS });
   }, [dispatch]);
@@ -47,11 +50,20 @@ const BurgerIngredients = () => {
       return null;
     }
     return (
+      <Link
+      to={{
+        pathname: `/ingredients/${el._id}`,
+        state: { background: location },
+      }}
+      className={`${styles.ingredientContainer} pl-4 pr-4`}
+      key={el._id}
+    >
       <Ingredient
         data={el}
         key={el._id}
         counter={bunBurger && bunBurger._id === el._id ? 1 : null}
       />
+      </Link>
     );
   });
 
@@ -64,11 +76,20 @@ const BurgerIngredients = () => {
     ).length;
     counter = counter === 0 ? null : counter;
     return (
+      <Link
+      to={{
+        pathname: `/ingredients/${el._id}`,
+        state: { background: location },
+      }}
+      className={`${styles.ingredientContainer} pl-4 pr-4`}
+      key={el._id}
+    >
       <Ingredient
         data={el}
         key={el._id}
         counter={counter}
       />
+      </Link>
     );
   });
 
@@ -81,11 +102,20 @@ const BurgerIngredients = () => {
     ).length;
     counter = counter === 0 ? null : counter;
     return (
+      <Link
+      to={{
+        pathname: `/ingredients/${el._id}`,
+        state: { background: location },
+      }}
+      className={`${styles.ingredientContainer} pl-4 pr-4`}
+      key={el._id}
+    >
       <Ingredient
         data={el}
         key={el._id}
         counter={counter}
       />
+      </Link>
     );
   });
 
