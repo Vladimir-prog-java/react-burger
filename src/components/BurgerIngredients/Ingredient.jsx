@@ -18,9 +18,8 @@ const Ingredient = (props) => {
     }),
   });
   const dragStyle = isDrag ? { opacity: "0.1" } : null;
-
   return (
-      <div ref={dragRef} style={dragStyle}>
+    <div ref={dragRef} style={dragStyle}>
       <div>
         <div className={`${styles.ingredient} pl-4 pr-4`}>
           <img src={data.image} alt={data.name} />
@@ -44,6 +43,14 @@ Ingredient.propTypes = {
   counter: PropTypes.oneOfType([
     PropTypes.oneOf([null]).isRequired,
     PropTypes.number.isRequired,
+  ]),
+  data: PropTypes.oneOfType([
+    PropTypes.oneOf([null]).isRequired,
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+    }),
   ]),
 };
 

@@ -1,7 +1,7 @@
 import { setCookie, getCookie, deleteCookie } from "../utils";
 const axios = require("axios");
 
-const COOKIE_EXPIRE_SEC = 10;
+const COOKIE_EXPIRE_SEC = 100;
 
 const registerUrl = "https://norma.nomoreparties.space/api/auth/register"; //- эндпоинт для регистрации пользователя.
 const authorizationUrl = "https://norma.nomoreparties.space/api/auth/login"; //- эндпоинт для авторизации.

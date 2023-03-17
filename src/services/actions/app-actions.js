@@ -6,21 +6,18 @@ import {
   UNSET_REDIRECT_TO_ORDER_DETAILS,
 } from "./authorization-actions";
 import { getCookie } from "../utils";
+
 const axios = require("axios");
 const getDataUrl = "https://norma.nomoreparties.space/api/ingredients";
 const postOrderUrl = "https://norma.nomoreparties.space/api/orders";
 
-export const SET_DATA = 'SET_DATA';
+export const SET_DATA = "SET_DATA";
 export const SET_MAIN_ERROR = "SET_MAIN_ERROR";
-export const SET_ORDER_NUMBER = 'SET_ORDER_NUMBER';
-export const SET_SELECT_INGREDIENT = 'SET_SELECT_INGREDIENT';
-export const DELETE_INGREDIENT_FROM_INGREDIENTS = 'DELETE_INGREDIENT_FROM_INGREDIENTS';
-export const REPLACE_INNER_DRAG_INGREDIENT = 'REPLACE_INNER_DRAG_INGREDIENT';
-export const SET_ADDED_INGREDIENT = 'SET_ADDED_INGREDIENT';
-
-export const BUN = 'bun';
-
-
+export const SET_ORDER_NUMBER = "SET_ORDER_NUMBER";
+export const DELETE_INGREDIENT_FROM_INGREDIENTS =
+  "DELETE_INGREDIENT_FROM_INGREDIENTS";
+export const REPLACE_INNER_DRAG_INGREDIENT = "REPLACE_INNER_DRAG_INGREDIENT";
+export const SET_ADDED_INGREDIENT = "SET_ADDED_INGREDIENT";
 
 export function getData() {
   return function (dispatch) {
@@ -31,7 +28,7 @@ export function getData() {
       })
       .catch((error) => dispatch({ type: SET_MAIN_ERROR, error: `${error}` }));
   };
-};
+}
 
 export function getOrder(ingredients, bun) {
   return async function (dispatch) {

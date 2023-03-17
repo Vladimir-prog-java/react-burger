@@ -17,26 +17,19 @@ import BurgerConstructorInnerIngredients from "./BurgerConstructorIngredients";
 
 const BurgerConstructor = () => {
 
-  const { bunBurger, ingredients } = useSelector((store) => store.ingredientsReducer);
-  // console.log('ingredients', ingredients)
+  const { bun, ingredients } = useSelector((store) => store.appReducer);
   const { redirectToLoginForOrder, redirectToOrderDetails } = useSelector(
     (store) => store.authorizationReducer
   );
-
-  const { isModalOrderDetailsOpen } = useSelector(
-    (store) => store.interfaceReducer
-  );
-
   const dispatch = useDispatch();
 
   let location = useLocation();
 
-  const handleModalClose = () => {
-    dispatch({type: CLOSE_MODAL_ORDER_DETAILS});
-  };
-
-  const ingredientsTotalPrice = useMemo(() => ingredients.reduce((acc, el) => acc += el.price, 0), [ingredients]) ;
-  const bunTotalPrice = useMemo(() => (bunBurger? bunBurger.price * 2 : 0), [bunBurger]);
+  const bunTotalPrice = bun ? bun.price * 2 : 0;
+  const ingredientsTotalPrice = ingredients.reduce(
+    (acc, el) => (acc += el.price),
+    0
+  );
   const totalPrice = bunTotalPrice + ingredientsTotalPrice;
 
   const [{ isDragContainer }, dropTarget] = useDrop({
@@ -54,39 +47,42 @@ const BurgerConstructor = () => {
     : null;
 
   return (
-    <>
     <section className={styles.burgerConstructor}>
-    <div
+      <div
         className={`mt-25 mb-10 ml-4 ${styles.burgerConstructorIngredientPlace}`}
         ref={dropTarget}
         style={burgerConstructorIngredientPlaceStyle}
       >
-        {bunBurger && (
+        {bun && (
           <div className="ml-8 mb-4">
             <ConstructorElement
               type="top"
               isLocked
-              text={`${bunBurger.name} (верх)`}
-              price={bunBurger.price}
-              thumbnail={bunBurger.image}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
-       {
+        {
           <div className={`pr-2 ${styles.scrollbar}`}>
             {ingredients.map((el, index) => (
-              <BurgerConstructorInnerIngredients el={el} index={index} key={el.key}/>
+              <BurgerConstructorInnerIngredients
+                el={el}
+                index={index}
+                key={el.key}
+              />
             ))}
           </div>
         }
-        {bunBurger && (
+        {bun && (
           <div className="ml-8">
             <ConstructorElement
               type="bottom"
               isLocked
-              text={`${bunBurger.name} (низ)`}
-              price={bunBurger.price}
-              thumbnail={bunBurger.image}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
@@ -99,9 +95,9 @@ const BurgerConstructor = () => {
         <Button
           type="primary"
           size="large"
-          htmlType="button"
           onClick={async () => {
-            bunBurger && ingredients && dispatch(getOrder(ingredients, bunBurger))}}
+            bun && ingredients && dispatch(getOrder(ingredients, bun));
+          }}
         >
           Оформить заказ
         </Button>
@@ -116,12 +112,6 @@ const BurgerConstructor = () => {
         />
       )}
     </section>
-     {isModalOrderDetailsOpen && (
-      <Modal toggleModal={handleModalClose} title="">
-        <OrderDetails />
-      </Modal>
-    )}
-    </>
   );
 };
 
