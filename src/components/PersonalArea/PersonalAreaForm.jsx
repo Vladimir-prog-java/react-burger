@@ -129,7 +129,8 @@ const PersonalAreaForm = () => {
             size="medium"
             onClick={(e) => {
               e.preventDefault();
-              dispatch(getUserData());
+              // dispatch(getUserData());
+              window.history.go(-1);
             }}
           >
             Отмена
