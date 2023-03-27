@@ -90,7 +90,7 @@ BurgerConstructorInnerIngredients.propTypes = {
       name: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       image: PropTypes.string.isRequired,
-    }).isRequired,
+    }),
 };
 
 export default BurgerConstructorInnerIngredients;

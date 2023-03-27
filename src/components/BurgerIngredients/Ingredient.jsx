@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
@@ -7,12 +6,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import styles from "./BurgerIngredients.module.css";
-import { OPEN_MODAL_INGREDIENT_DETAILS } from "../../services/actions/interface-actions";
-import { SET_SELECT_INGREDIENT } from "../../services/actions/app-actions";
 
 const Ingredient = (props) => {
   const { data, counter } = props;
-  const dispatch = useDispatch();
+
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredient",
     item: data,
@@ -21,17 +18,9 @@ const Ingredient = (props) => {
     }),
   });
   const dragStyle = isDrag ? { opacity: "0.1" } : null;
-
   return (
-    <div
-      className={`${styles.ingredientContainer} pl-4 pr-4`}
-      ref={dragRef}
-      style={dragStyle}
-      onClick={() =>
-        dispatch({ type: SET_SELECT_INGREDIENT, ingredient: data })
-      }
-    >
-      <div onClick={() => dispatch({ type: OPEN_MODAL_INGREDIENT_DETAILS })}>
+    <div ref={dragRef} style={dragStyle}>
+      <div>
         <div className={`${styles.ingredient} pl-4 pr-4`}>
           <img src={data.image} alt={data.name} />
           <div className={`${styles.ingredientPrice} mt-1 mb-1`}>
@@ -54,6 +43,14 @@ Ingredient.propTypes = {
   counter: PropTypes.oneOfType([
     PropTypes.oneOf([null]).isRequired,
     PropTypes.number.isRequired,
+  ]),
+  data: PropTypes.oneOfType([
+    PropTypes.oneOf([null]).isRequired,
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+    }),
   ]),
 };
 

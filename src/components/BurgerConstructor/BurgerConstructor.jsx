@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect, useLocation } from "react-router-dom";
 import { useDrop } from "react-dnd";
 import {
   ConstructorElement,
@@ -10,33 +11,31 @@ import { getOrder } from "../../services/actions/app-actions";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
-import { SET_SELECT_INGREDIENT } from "../../services/actions/app-actions";
+import { SET_ADDED_INGREDIENT } from "../../services/actions/app-actions";
 import { CLOSE_MODAL_ORDER_DETAILS} from "../../services/actions/interface-actions"
 import BurgerConstructorInnerIngredients from "./BurgerConstructorIngredients";
 
 const BurgerConstructor = () => {
 
-  const { bunBurger, ingredients } = useSelector((store) => store.ingredientsReducer);
-  // console.log('ingredients', ingredients)
-  
-  const { isModalOrderDetailsOpen } = useSelector(
-    (store) => store.interfaceReducer
+  const { bun, ingredients } = useSelector((store) => store.appReducer);
+  const { redirectToLoginForOrder, redirectToOrderDetails } = useSelector(
+    (store) => store.authorizationReducer
   );
-
   const dispatch = useDispatch();
 
-  const handleModalClose = () => {
-    dispatch({type: CLOSE_MODAL_ORDER_DETAILS});
-  };
+  let location = useLocation();
 
-  const ingredientsTotalPrice = useMemo(() => ingredients.reduce((acc, el) => acc += el.price, 0), [ingredients]) ;
-  const bunTotalPrice = useMemo(() => (bunBurger? bunBurger.price * 2 : 0), [bunBurger]);
+  const bunTotalPrice = bun ? bun.price * 2 : 0;
+  const ingredientsTotalPrice = ingredients.reduce(
+    (acc, el) => (acc += el.price),
+    0
+  );
   const totalPrice = bunTotalPrice + ingredientsTotalPrice;
 
   const [{ isDragContainer }, dropTarget] = useDrop({
     accept: "ingredient",
     drop(element) {
-      dispatch({ type: SET_SELECT_INGREDIENT, ingredient: element });
+      dispatch({ type: SET_ADDED_INGREDIENT, ingredient: element });
     },
     collect: (monitor) => ({
       isDragContainer: monitor.canDrop(),
@@ -48,39 +47,42 @@ const BurgerConstructor = () => {
     : null;
 
   return (
-    <>
     <section className={styles.burgerConstructor}>
-    <div
+      <div
         className={`mt-25 mb-10 ml-4 ${styles.burgerConstructorIngredientPlace}`}
         ref={dropTarget}
         style={burgerConstructorIngredientPlaceStyle}
       >
-        {bunBurger && (
+        {bun && (
           <div className="ml-8 mb-4">
             <ConstructorElement
               type="top"
               isLocked
-              text={`${bunBurger.name} (верх)`}
-              price={bunBurger.price}
-              thumbnail={bunBurger.image}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
-       {
+        {
           <div className={`pr-2 ${styles.scrollbar}`}>
             {ingredients.map((el, index) => (
-              <BurgerConstructorInnerIngredients el={el} index={index} key={el.key}/>
+              <BurgerConstructorInnerIngredients
+                el={el}
+                index={index}
+                key={el.key}
+              />
             ))}
           </div>
         }
-        {bunBurger && (
+        {bun && (
           <div className="ml-8">
             <ConstructorElement
               type="bottom"
               isLocked
-              text={`${bunBurger.name} (низ)`}
-              price={bunBurger.price}
-              thumbnail={bunBurger.image}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
@@ -93,20 +95,23 @@ const BurgerConstructor = () => {
         <Button
           type="primary"
           size="large"
-          htmlType="button"
-          onClick={() =>
-            bunBurger && ingredients && dispatch(getOrder(ingredients, bunBurger))}
+          onClick={async () => {
+            bun && ingredients && dispatch(getOrder(ingredients, bun));
+          }}
         >
           Оформить заказ
         </Button>
       </div>
+      {redirectToLoginForOrder && <Redirect to="/login" />}
+      {redirectToOrderDetails && (
+        <Redirect
+          to={{
+            pathname: "/order-details",
+            state: { background: location },
+          }}
+        />
+      )}
     </section>
-     {isModalOrderDetailsOpen && (
-      <Modal toggleModal={handleModalClose} title="">
-        <OrderDetails />
-      </Modal>
-    )}
-    </>
   );
 };
 
