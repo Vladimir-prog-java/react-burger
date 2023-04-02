@@ -13,13 +13,13 @@ import {
   BurgerIngredientModal,
   OrderDetailsModal,
 } from "../../pages";
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../../services/actions/authorization-actions";
 
-function ModalSwitch() {
-  const location = useLocation();
-  const history = useHistory();
+const ModalSwitch: FC = () => {
+  const location: any = useLocation();
+  const history: any = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,16 +34,16 @@ function ModalSwitch() {
   return (
     <>
       <Switch location={background || location}>
-        <ProtectedRoute path="/login" exact={true}>
+        <ProtectedRoute path="/login"  onlyUnAuth = {false} exact={true}>
           <LoginPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/register" exact={true}>
+        <ProtectedRoute path="/register" onlyUnAuth = {false} exact={true}>
           <RegisterPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/forgot-password" exact={true}>
+        <ProtectedRoute path="/forgot-password"  onlyUnAuth = {false} exact={true}>
           <ForgotPasswordPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/reset-password" exact={true}>
+        <ProtectedRoute path="/reset-password"  onlyUnAuth = {false} exact={true}>
           <ResetPasswordPage />
         </ProtectedRoute>
         <ProtectedRoute path="/profile" exact={true} onlyUnAuth={true}>

@@ -7,10 +7,10 @@ import {
 } from "./authorization-actions";
 import { getCookie } from "../utils";
 import { TData, AppThunk, AppDispatch } from "../types";
-
+import {BASE_URL} from "../../utils/burger-api";
 const axios = require("axios");
-const getDataUrl: string = "https://norma.nomoreparties.space/api/ingredients";
-const postOrderUrl: string = "https://norma.nomoreparties.space/api/orders";
+const getDataUrl: string = `${BASE_URL}/ingredients`;
+const postOrderUrl: string = `${BASE_URL}/orders`;
 
 export const SET_DATA: "SET_DATA" = "SET_DATA";
 export const SET_MAIN_ERROR: "SET_MAIN_ERROR" = "SET_MAIN_ERROR";

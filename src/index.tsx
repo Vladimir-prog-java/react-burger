@@ -5,7 +5,6 @@ import App from "./components/App/App";
 import reportWebVitals from "./reportWebVitals";
 import { applyMiddleware } from "redux";
 import {legacy_createStore as createStore} from "redux"
-import{configureStore} from "@reduxjs/toolkit"
 import { Provider } from "react-redux";
 import { rootReducer } from "./services/reducers/rootReducer";
 import { composeWithDevTools } from "redux-devtools-extension";

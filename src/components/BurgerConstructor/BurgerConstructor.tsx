@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
 import { useDrop } from "react-dnd";
@@ -8,8 +8,6 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { getOrder } from "../../services/actions/app-actions";
-import Modal from "../Modal/Modal";
-import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
 import { SET_ADDED_INGREDIENT } from "../../services/actions/app-actions";
 import { TData } from "../../services/types";

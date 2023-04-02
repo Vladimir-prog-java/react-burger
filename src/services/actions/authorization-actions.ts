@@ -1,18 +1,19 @@
 import { setCookie, getCookie, deleteCookie } from "../utils";
 import { AppDispatch, AppThunk } from "../types";
+import {BASE_URL} from "../../utils/burger-api";
 const axios = require("axios");
 
 const COOKIE_EXPIRE_SEC = 1200;
 
-const registerUrl = "https://norma.nomoreparties.space/api/auth/register"; //- эндпоинт для регистрации пользователя.
-const authorizationUrl = "https://norma.nomoreparties.space/api/auth/login"; //- эндпоинт для авторизации.
-const logoutUrl = "https://norma.nomoreparties.space/api/auth/logout"; //- эндпоинт для выхода из системы.
-const tokenRefreshUrl = "https://norma.nomoreparties.space/api/auth/token"; //- эндпоинт обновления токена.
+const registerUrl = `${BASE_URL}/auth/register`; //- эндпоинт для регистрации пользователя.
+const authorizationUrl = `${BASE_URL}/auth/login`; //- эндпоинт для авторизации.
+const logoutUrl = `${BASE_URL}/auth/logout`; //- эндпоинт для выхода из системы.
+const tokenRefreshUrl = `${BASE_URL}/auth/token`; //- эндпоинт обновления токена.
 const restorePasswordUrl =
-  "https://norma.nomoreparties.space/api/password-reset"; // - эндпоинт восстановления пароля.
+  `${BASE_URL}/password-reset`; // - эндпоинт восстановления пароля.
 const setNewPasswordUrl =
-  "https://norma.nomoreparties.space/api/password-reset/reset"; // - эндпоинт установки нового пароля пароля.
-const userDataUrl = "https://norma.nomoreparties.space/api/auth/user"; // - эндпоинт получения данных о пользователе и обновления данных о пользователе.
+  `${BASE_URL}/password-reset/reset`; // - эндпоинт установки нового пароля пароля.
+const userDataUrl = `${BASE_URL}/auth/user`; // - эндпоинт получения данных о пользователе и обновления данных о пользователе.
 
 export const SET_FORM_NAME: "SET_FORM_NAME" = "SET_FORM_NAME";
 export const SET_FORM_EMAIL: "SET_FORM_EMAIL" = "SET_FORM_EMAIL";

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState } from "react";
+import React, { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -16,13 +16,13 @@ const BurgerIngredients: FC = () => {
 
   let location = useLocation();
 
-  const handleScroll = (e: any) => {
-    if (e.target.scrollTop < 140) {
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    if ((e.target as HTMLElement).scrollTop < 140) {
       dispatch({
         type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
         ingredientsName: "Булки",
       });
-    } else if (e.target.scrollTop < 560 && e.target.scrollTop > 140) {
+    } else if ((e.target as HTMLElement).scrollTop < 560 && (e.target as HTMLElement).scrollTop > 140) {
       dispatch({
         type: SET_CURRENT_BURGER_INGREDIENTS_NAME,
         ingredientsName: "Соусы",

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import AppHeader from "../../components/AppHeader/AppHeader";
 import AuthenticationForm from "../../components/AuthenticationForm/AuthenticationForm";
 import ResetPasswordForm from "../../components/ResetPasswordForm/ResetPasswordForm";
 import { useHistory, Redirect } from "react-router-dom";
@@ -9,7 +8,6 @@ export const ResetPasswordPage: FC = () => {
   const redirect = history.location.state !== "forgot-password";
   return (
     <>
-      <AppHeader />
       <AuthenticationForm>
         <ResetPasswordForm />
       </AuthenticationForm>

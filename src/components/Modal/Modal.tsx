@@ -9,7 +9,7 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal: FC<TModalWindow> = ({ children, title, handleModalClose }) => {
   const closeModalWindowByEsc = useCallback(
-    (e: any) => {
+    (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         handleModalClose();
       }

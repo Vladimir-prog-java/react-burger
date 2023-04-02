@@ -1,10 +1,8 @@
 import { FC } from "react";
-import AppHeader from "../../components/AppHeader/AppHeader";
 import { Link } from "react-router-dom";
 
 export const NotFoundPage: FC = () => (
   <>
-    <AppHeader />
     <div
       style={{
         margin: "0 auto",

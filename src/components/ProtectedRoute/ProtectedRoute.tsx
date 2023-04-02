@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { useSelector } from "react-redux";
-import { Route, Redirect, useLocation  } from "react-router-dom";
+import { Route, Redirect, useLocation } from "react-router-dom";
 import {RootState} from "../../services/reducers/rootReducer";
 
 const ProtectedRoute: FC<{
@@ -12,7 +12,7 @@ const ProtectedRoute: FC<{
   const authorized = useSelector(
     (store: RootState) => store.authorizationReducer.authorized
   );
-//   const location  = useLocation();
+  const location  = useLocation();
 // console.log("location", location);
 
   return (
@@ -24,8 +24,8 @@ const ProtectedRoute: FC<{
           return children;
         }
         if (!authorized && onlyUnAuth) {
-          // return <Redirect to={location?.state?.from || '/'} />;
-          return <Redirect to="/login" />;
+          return  <Redirect to={{ pathname: "/login", state: { from: location } }} />;
+          // return <Redirect to="/login" />;
         }
         if (!authorized && !onlyUnAuth) {
           return children;

@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getData } from "../../services/actions/app-actions";
 import ModalSwitch from "./ModalSwitch"
+import Header from "../AppHeader/AppHeader"
 
 const App:FC = () => {
 
@@ -14,6 +15,7 @@ const App:FC = () => {
 
   return (
     <BrowserRouter>
+      <Header />
       <ModalSwitch />
     </BrowserRouter>
   );
