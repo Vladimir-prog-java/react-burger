@@ -4,7 +4,9 @@ import { store } from "../../index";
 import { ThunkAction } from "redux-thunk";
 import { TAppActions } from "../actions/app-actions";
 import { TAuthorizationActions } from "../actions/authorization-actions";
+import { TOrderHistoryActions } from "../actions/order-history-actions";
 import { TInterfaceAction } from "../actions/interface-actions";
+import { TOrderTapeActions } from "../actions/order-tape-actions";
 
 export type TCookiePropsType = {
   expires?: number | string;
@@ -45,7 +47,9 @@ export type AppDispatch = typeof store.dispatch;
 type TApplicationActions =
   | TAppActions
   | TAuthorizationActions
-  | TInterfaceAction;
+  | TOrderHistoryActions
+  | TInterfaceAction
+  | TOrderTapeActions;
 
 export type AppThunk<TReturn = void> = ActionCreator<
   ThunkAction<TReturn, Action, RootState, TApplicationActions>

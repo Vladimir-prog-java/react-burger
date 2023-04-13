@@ -12,6 +12,9 @@ import {
   BurgerIngredientPage,
   BurgerIngredientModal,
   OrderDetailsModal,
+  OrderTapePage,
+  OrderIngredientModalPage,
+  OrderIngredientPage,
 } from "../../pages";
 import { useEffect, FC } from "react";
 import { useDispatch } from "react-redux";
@@ -49,9 +52,18 @@ const ModalSwitch: FC = () => {
         <ProtectedRoute path="/profile" exact={true} onlyUnAuth={true}>
           <ProfilePage />
         </ProtectedRoute>
+        <Route path="/profile/orders/:id" exact={false}>
+          <OrderIngredientPage profile={true} />
+        </Route>
         <ProtectedRoute path="/profile/orders" exact={true} onlyUnAuth={true}>
           <OrdersHistoryPage />
         </ProtectedRoute>
+        <Route path="/feed" exact={true}>
+          <OrderTapePage />
+        </Route>
+        <Route path="/feed/:id" exact={true}>
+          <OrderIngredientPage profile={false}/>
+        </Route>
         <Route path="/ingredients/:id">
           <BurgerIngredientPage />
         </Route>
@@ -64,11 +76,21 @@ const ModalSwitch: FC = () => {
       </Switch>
       {background && (
         <>
+          <ProtectedRoute
+            path="/profile/orders/:id"
+            onlyUnAuth={true}
+            exact={false}
+          >
+            <OrderIngredientModalPage profile={true} />
+          </ProtectedRoute>
           <Route path="/ingredients/:id" exact={true}>
             <BurgerIngredientModal />
           </Route>
           <Route path="/order-details" exact={true}>
             <OrderDetailsModal />
+          </Route>
+          <Route path="/feed/:id" exact={true}>
+            <OrderIngredientModalPage profile={false}/>
           </Route>
         </>
       )}

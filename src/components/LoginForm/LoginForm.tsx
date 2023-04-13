@@ -32,7 +32,10 @@ const LoginForm: FC = () => {
     <>
       <h2 className="mt-20 mb-6 text text_type_main-medium">Вход</h2>
       {error && <h2 className="mb-6 text text_type_main-medium" style={{textAlign: "center"}}>{error}</h2>}
-      <form className={`${styles.flexColumnCenter} mb-20`}>
+      <form className={`${styles.flexColumnCenter} mb-20`} onSubmit={(e) => {
+            e.preventDefault();
+            dispatch(makeLogin(formEmail, formPassword));
+          }}>
         <div className="mb-6">
           <EmailInput
             name={"email"}
@@ -57,10 +60,7 @@ const LoginForm: FC = () => {
             }
           />
         </div>
-        <Button type="primary" htmlType="button" size="medium" onClick={(e) => {
-          e.preventDefault();
-          dispatch(makeLogin(formEmail, formPassword));
-        }}>
+        <Button type="primary" htmlType="submit" size="medium" >
           Войти
         </Button>
       </form>
