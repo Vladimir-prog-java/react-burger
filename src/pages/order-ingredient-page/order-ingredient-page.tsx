@@ -29,7 +29,6 @@ export const OrderIngredientPage: FC<{ profile: boolean }> = ({ profile }) => {
 
   return (
     <>
-      <AppHeader />
       <div style={{maxWidth:"640px", margin:"120px auto 0"}}>
         <OrderIngredients order={selectedOrder} ingredients={ingredients} />
       </div>

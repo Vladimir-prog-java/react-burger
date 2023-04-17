@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { useCallback, useEffect, useState, FC } from "react";
 import { useSelector } from "../../services/hooks";
 import style from "./OrderBox.module.css";
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 import { TOrderBox, TData } from "../../services/types";
 
 const OrderBox: FC<TOrderBox> = ({ element }) => {
@@ -18,24 +18,30 @@ const OrderBox: FC<TOrderBox> = ({ element }) => {
       );
   }, [data, element]);
 
+  // const dateToString = useCallback(() => {
+  //   const inputDate = new Date(element?.createdAt);
+  //   const dateNow = new Date();
+  //   const outputDate =
+  //     dateNow.getMonth() === inputDate.getMonth() &&
+  //     dateNow.getDate() === inputDate.getDate()
+  //       ? "Сегодня"
+  //       : `${inputDate.getDate()}-${
+  //           inputDate.getMonth() + 1
+  //         }-${inputDate.getFullYear()}`;
+  //   const outputTime = `${inputDate.getHours()}:${
+  //     inputDate.getMinutes() < 10
+  //       ? `0${inputDate.getMinutes()}`
+  //       : inputDate.getMinutes()
+  //   }`;
+  //   const GMT = (dateNow.getHours() - dateNow.getUTCHours())
+  //   return `${outputDate}, ${outputTime} i-GMT${GMT > 0 ? `+${GMT}` : GMT}`;
+  // }, [element?.createdAt]);
   const dateToString = useCallback(() => {
+    // console.log('element?.createdAt', element?.createdAt);
     const inputDate = new Date(element?.createdAt);
-    const dateNow = new Date();
-    const outputDate =
-      dateNow.getMonth() === inputDate.getMonth() &&
-      dateNow.getDate() === inputDate.getDate()
-        ? "Сегодня"
-        : `${inputDate.getDate()}-${
-            inputDate.getMonth() + 1
-          }-${inputDate.getFullYear()}`;
-    const outputTime = `${inputDate.getHours()}:${
-      inputDate.getMinutes() < 10
-        ? `0${inputDate.getMinutes()}`
-        : inputDate.getMinutes()
-    }`;
-    const GMT = (dateNow.getHours() - dateNow.getUTCHours())
-    return `${outputDate}, ${outputTime} i-GMT${GMT > 0 ? `+${GMT}` : GMT}`;
-  }, [element?.createdAt]);
+    return <FormattedDate date={inputDate} />
+  }, [element?.createdAt])
+
 
   return (
     <div className={style.container}>
