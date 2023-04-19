@@ -1,6 +1,5 @@
 import { useSelector } from "../../services/hooks";
 import { useParams } from "react-router-dom";
-import AppHeader from "../../components/AppHeader/AppHeader";
 import OrderIngredients from "../../components/OrderIngredients/OrderIngredients";
 import { FC } from "react";
 
