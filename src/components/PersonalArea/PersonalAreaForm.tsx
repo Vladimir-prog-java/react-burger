@@ -134,7 +134,7 @@ const PersonalAreaForm: FC = () => {
           >
             Отмена
           </span>
-          <Button type="primary" htmlType="button" size="medium">
+          <Button type="primary" htmlType="submit" size="medium">
             Сохранить
           </Button>
         </div>

@@ -37,7 +37,10 @@ const ForgotPasswordForm: FC = () => {
           {error}
         </h2>
       )}
-      <form className={`${styles.flexColumnCenter} mb-20`}>
+      <form className={`${styles.flexColumnCenter} mb-20`} onSubmit={(e) => {
+            e.preventDefault();
+            dispatch(restorePassword(formEmail));
+          }}>
         <div className="mb-6">
           <Input
             type={"email"}
@@ -53,12 +56,8 @@ const ForgotPasswordForm: FC = () => {
         </div>
         <Button
           type="primary"
-          htmlType="button"
+          htmlType="submit"
           size="medium"
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(restorePassword(formEmail));
-          }}
         >
           Восстановить
         </Button>

@@ -9,12 +9,16 @@ import { Provider } from "react-redux";
 import { rootReducer } from "./services/reducers/rootReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
+import { orderTapeSocketMiddleware } from "./services/actions/order-tape-actions";
+import { orderHistorySocketMiddleware } from "./services/actions/order-history-actions";
 
 
 export const store = createStore(
   rootReducer,
   composeWithDevTools(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk, 
+    orderTapeSocketMiddleware(),
+    orderHistorySocketMiddleware())
   )
 );
 // export const store = configureStore({
