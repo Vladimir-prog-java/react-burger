@@ -1,7 +1,7 @@
 import { SET_CURRENT_BURGER_INGREDIENTS_NAME, IInterfaceAction } from "../actions/interface-actions";
 import { TInterfaceReducerState } from "../types";
 
-const initialState: TInterfaceReducerState = {
+export const initialState: TInterfaceReducerState = {
   currentBurgerIngredientsName: "Булки",
 };
 
