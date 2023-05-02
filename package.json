@@ -41,6 +41,7 @@
       "react-app/jest"
     ]
   },
+  "homepage": "https://vladimir-prog-java.github.io/react-burger/",
   "browserslist": {
     "production": [
       ">0.2%",

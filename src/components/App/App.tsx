@@ -1,5 +1,5 @@
 import React, {FC, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../services/actions/app-actions";
 import ModalSwitch from "./ModalSwitch"
@@ -26,10 +26,10 @@ const App:FC = () => {
   }, [authorized, dispatch])
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header />
       <ModalSwitch />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
