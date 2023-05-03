@@ -21,12 +21,7 @@ export const store = createStore(
     orderHistorySocketMiddleware())
   )
 );
-// export const store = configureStore({
-//   reducer,
-//   composeWithDevTools,
-//     applyMiddleware,
-// }
-// );
+
 ReactDOM.render(
   <Provider store={store}>
       <App />

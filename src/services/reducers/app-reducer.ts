@@ -10,7 +10,7 @@ import {
 import { TAppReducerState, TData } from "../types";
 import { TAppActions } from "../actions/app-actions";
 
-const initialState: TAppReducerState = {
+export const initialState: TAppReducerState = {
   data: [],
   error: null,
   bun: null,
